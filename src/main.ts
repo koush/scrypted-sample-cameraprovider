@@ -79,25 +79,25 @@ class SampleCameraDevice extends ScryptedDeviceBase implements Intercom, Camera,
     }
 }
 
-class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, DeviceDiscovery, Settings, DeviceCreator {
+class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, Settings, DeviceCreator {
     devices = new Map<string, SampleCameraDevice>();
 
     settingsStorage = new StorageSettings(this, {
         email: {
             title: 'Email',
-            onPut: async () => this.clearTryDiscoverDevices(),
+            onPut: async () => this.cleararTrySyncDevices(),
         },
         password: {
             title: 'Password',
             type: 'password',
-            onPut: async () => this.clearTryDiscoverDevices(),
+            onPut: async () => this.cleararTrySyncDevices(),
         },
         twoFactorCode: {
             title: 'Two Factor Code',
             description: 'Optional: If 2 factor is enabled on your account, enter the code sent to your email or phone number.',
             onPut: async (oldValue, newValue) => {
                 await this.tryLogin(newValue);
-                await this.discoverDevices(0);
+                await this.syncDevices(0);
             },
             noStore: true,
         },
@@ -105,7 +105,7 @@ class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, D
 
     constructor() {
         super();
-        this.discoverDevices(0);
+        this.syncDevices(0);
     }
 
     async getCreateDeviceSettings(): Promise<Setting[]> {
@@ -131,10 +131,10 @@ class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, D
         return nativeId;
     }
 
-    clearTryDiscoverDevices() {
+    cleararTrySyncDevices() {
         // add code to clear any refresh tokens, etc, here. login changed.
 
-        this.discoverDevices(0);
+        this.syncDevices(0);
     }
 
     async tryLogin(twoFactorCode?: string) {
@@ -151,7 +151,7 @@ class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, D
         return this.settingsStorage.putSetting(key, value);
     }
 
-    async discoverDevices(duration: number) {
+    async syncDevices(duration: number) {
         await this.tryLogin();
         // add code to retrieve the list of cameras.
         const devices: Device[] = [];
@@ -201,12 +201,16 @@ class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, D
         this.console.log('discovered devices');
     }
 
-    getDevice(nativeId: string) {
+    async getDevice(nativeId: string) {
         if (!this.devices.has(nativeId)) {
             const camera = new SampleCameraDevice(this, nativeId);
             this.devices.set(nativeId, camera);
         }
         return this.devices.get(nativeId);
+    }
+
+    async releaseDevice(id: string, nativeId: string): Promise<void> {
+        
     }
 }
 

@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "resolveJsonModule": true,
-        "moduleResolution": "NodeNext",
+        "moduleResolution": "Node16",
         "target": "esnext",
         "esModuleInterop": true,
+        "sourceMap": true,
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
     ]
 }
