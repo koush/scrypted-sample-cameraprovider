@@ -214,4 +214,4 @@ class SampleCameraPlugin extends ScryptedDeviceBase implements DeviceProvider, S
     }
 }
 
-export default new SampleCameraPlugin();
+export default SampleCameraPlugin;
