@@ -27,7 +27,7 @@ class SampleCameraDevice extends ScryptedDeviceBase implements Intercom, Camera,
     async getVideoStream(options?: MediaStreamOptions): Promise<MediaObject> {
         let ffmpegInput: FFmpegInput;
 
-        const file = path.join(process.env.SCRYPTED_PLUGIN_VOLUME, 'zip', 'unzipped', 'fs', 'dog.mp4');
+        const file = path.join(process.env.SCRYPTED_PLUGIN_VOLUME, 'zip', 'unzipped', 'fs', 'people.mp4');
 
         ffmpegInput = {
             // the input doesn't HAVE to be an url, but if it is, provide this hint.
